@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
 public/vendor
+public/build
 config.json
 .env

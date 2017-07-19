@@ -8,43 +8,45 @@ var notify = require('gulp-notify');
 var templateCache = require('gulp-angular-templatecache');
 
 gulp.task('js', function () {
-    gulp.src(['public/js/**/*.js'])
-    .pipe(sourcemaps.init())
+    gulp.src(['public/js/**/*.js', 'public/build/js/templates.js'])
+        .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(ngAnnotate())
         .on('error', notify.onError(function (error) {
             return error.message;
         }))
         .pipe(uglify())
-    .pipe(sourcemaps.write('.'))
-    .pipe(notify("Javascript compiled!"))
-    .pipe(gulp.dest('public/build'))
+        .pipe(sourcemaps.write('.'))
+        .pipe(notify("Javascript compiled!"))
+        .pipe(gulp.dest('public/build'))
 });
 
-gulp.task('sass', function(){
+gulp.task('sass', function () {
     gulp.src('public/scss/*.scss')
-    .pipe(sourcemaps.init())
-        .pipe(sass({outputStyle:'compressed'}))
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: 'compressed'
+        }))
         .on('error', notify.onError(function (error) {
             return error.message;
         }))
-    .pipe(sourcemaps.write('.'))
-    .pipe(notify("CSS compiled!"))
-    .pipe(gulp.dest('public/css'))
+        .pipe(sourcemaps.write('.'))
+        .pipe(notify("CSS compiled!"))
+        .pipe(gulp.dest('public/build/css'))
 });
 
-gulp.task('templates', function(){
+gulp.task('templates', function () {
     gulp.src('public/templates/**/*.html')
         .pipe(templateCache({
-            module : 'rallly',
-            root : 'templates'
+            module: 'rallly',
+            root: 'templates'
         }))
         .pipe(notify("Templates compiled!"))
-        .pipe(gulp.dest('public/js'))
+        .pipe(gulp.dest('public/build/js'))
 });
 
-gulp.task('watch', ['js','sass'], function () {
+gulp.task('watch', ['js', 'sass'], function () {
     gulp.watch('public/scss/**/*.scss', ['sass'])
     gulp.watch('public/templates/**/*.html', ['templates'])
-    gulp.watch('public/js/**/*.js', ['js'])
+    gulp.watch(['public/js/**/*.js', 'public/build/js/templates.js'], ['js'])
 });
