@@ -10,6 +10,8 @@ var EventSchema = new Schema({
       default: shortid.generate
     },
     description : String,
+    passwordEnabled : Boolean,
+    password : String,
     creator : {
         name : String,
         email : String,
